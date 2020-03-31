@@ -26,7 +26,7 @@ namespace UserService.Controllers
             try
             {
                 var collection = store.GetCollection<Users>();
-                var results = collection.AsQueryable().ToList();
+                var results = collection.AsQueryable().FirstOrDefault();
                 return Ok(results);
             }
             catch (Exception ex)
