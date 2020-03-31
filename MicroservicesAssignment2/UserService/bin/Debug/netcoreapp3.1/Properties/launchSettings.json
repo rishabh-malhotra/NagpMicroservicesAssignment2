@@ -30,7 +30,7 @@
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/Users/1",
-      "publishAllPorts": true
+      "httpPort": 61579
     }
   }
 }

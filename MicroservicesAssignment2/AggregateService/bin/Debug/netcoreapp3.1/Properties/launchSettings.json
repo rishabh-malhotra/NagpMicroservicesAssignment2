@@ -25,6 +25,16 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5000"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/GetOrderDetails/1",
+      "environmentVariables": {
+        "ORDER_URL": "http://orderservice.default.svc.cluster.local",
+        "USER_URL": "http://userservice.default.svc.cluster.local"
+      },
+      "httpPort": 61597
     }
   }
 }
