@@ -14,21 +14,34 @@ namespace AggregateService.Controllers
     [ApiController]
     public class AggregateController : ControllerBase
     {
-        [HttpGet,Route("api/GetOrderDetails")]
-        public async Task<IActionResult> GetOrderDetails(int OrderId)
+        [HttpGet,Route("api/GetOrderDetails/{id}")]
+        public async Task<IActionResult> GetOrderDetails(int Id)
         {
-            Dictionary<string, object> finalResponse = new Dictionary<string, object>();
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(Startup.UserServiceURL).GetAwaiter().GetResult();
-            string result1 = await response.Content.ReadAsStringAsync();
-            object res1 = JsonSerializer.Deserialize<object>(result1);
-            finalResponse.Add("userDetails", res1);
-            HttpResponseMessage responseFromOrderService = client.GetAsync(Startup.OrderServiceURL).GetAwaiter().GetResult();
-            string result2 = await responseFromOrderService.Content.ReadAsStringAsync();
-            object res2 = JsonSerializer.Deserialize<object>(result2);
-            finalResponse.Add("orders", res2);
-            return Ok(finalResponse);
-            //GetAsync("localhost:61579/api/Users").Result;
+            string userUrl= Environment.GetEnvironmentVariable("USER_URL");
+            string orderUrl = Environment.GetEnvironmentVariable("ORDER_URL");
+
+            try
+            {
+                Dictionary<string, object> finalResponse = new Dictionary<string, object>();
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage responseFromUserService = client.GetAsync(String.Concat(userUrl,"/"+Id)).GetAwaiter().GetResult();
+                    string userDetailsString = await responseFromUserService.Content.ReadAsStringAsync();
+                    object userDetailsObject = JsonSerializer.Deserialize<object>(userDetailsString);
+                    finalResponse.Add("userDetails", userDetailsObject);
+
+                    HttpResponseMessage responseFromOrderService = client.GetAsync(String.Concat(orderUrl, "/" + Id)).GetAwaiter().GetResult();
+                    string orderDetailsString = await responseFromOrderService.Content.ReadAsStringAsync();
+                    object orderDetailsObject = JsonSerializer.Deserialize<object>(orderDetailsString);
+                    finalResponse.Add("orders", orderDetailsObject);
+                }
+                return Ok(finalResponse);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
         }   
     }
 }

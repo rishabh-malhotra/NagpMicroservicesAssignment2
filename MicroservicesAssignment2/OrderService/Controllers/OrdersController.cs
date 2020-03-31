@@ -10,7 +10,6 @@ using OrderService.Model;
 
 namespace OrderService.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class OrdersController : ControllerBase
     {
@@ -21,13 +20,15 @@ namespace OrderService.Controllers
             _logger = logger;
             store = new DataStore("Data/orders.json");
         }
-        public async Task<IActionResult> Get()
+
+        [HttpGet,Route("api/orders/{id}")]
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
                 var collection = store.GetCollection<Orders>();
-                var results = collection.AsQueryable().ToList();
-                return Ok(results);
+                var orderDetails = collection.AsQueryable().ToList();
+                return Ok(orderDetails);
             }
             catch(Exception ex)
             {

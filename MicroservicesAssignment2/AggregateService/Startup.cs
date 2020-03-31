@@ -19,8 +19,6 @@ namespace AggregateService
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            OrderServiceURL = configuration["ConfigurationData:OrderServiceUrl"];
-            UserServiceURL = configuration["ConfigurationData:UserServiceUrl"];
         }
 
         public IConfiguration Configuration { get; }

@@ -10,7 +10,7 @@ using UserService.Model;
 
 namespace UserService.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -21,13 +21,15 @@ namespace UserService.Controllers
             _logger = logger;
             store = new DataStore("Data/users.json");
         }
-        public async Task<IActionResult> Get()
+
+        [HttpGet, Route("api/users/{id}")]
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
                 var collection = store.GetCollection<Users>();
-                var results = collection.AsQueryable().FirstOrDefault();
-                return Ok(results);
+                var userDetails = collection.AsQueryable().FirstOrDefault();
+                return Ok(userDetails);
             }
             catch (Exception ex)
             {
